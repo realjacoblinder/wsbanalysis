@@ -37,7 +37,8 @@ while after_time <= stop_time:
     after_time = after_time + (max_time - after_time)
     time.sleep(2)  # not including this got us shutdown by the API
 
-    filename = str(datetime.datetime.fromtimestamp(max_time).month) + '.' + \
+    filename = str(datetime.datetime.fromtimestamp(max_time).day) + '.' + \
+               str(datetime.datetime.fromtimestamp(max_time).month) + '.' + \
                str(datetime.datetime.fromtimestamp(max_time).year) + '.' + \
                str(datetime.datetime.fromtimestamp(max_time).hour) + '.' + \
                str(datetime.datetime.fromtimestamp(max_time).minute)+'.json'
