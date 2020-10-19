@@ -2,9 +2,7 @@ import requests
 import json
 import datetime
 import time
-# import re
-# import pandas as pd
-# import yfinance as yf
+from os import path
 
 after_time = datetime.datetime(2019, 10, 1, 0, 0).timestamp()
 after_time = int(after_time)
@@ -17,7 +15,12 @@ data = all_posts.json()
 
 good_flairs = ['DD', 'Options', 'Stocks', 'Fundamentals', 'Technicals', 'YOLO', 'Discussion']
 good_posts = []
+
 max_time = 0
+
+if path.exists('maxTime.txt'):
+    with open('maxTime.txt', 'r') as f:
+        max_time = int(f.read())
 
 while after_time <= stop_time:
     all_posts = requests.get(
@@ -41,7 +44,8 @@ while after_time <= stop_time:
                str(datetime.datetime.fromtimestamp(max_time).month) + '.' + \
                str(datetime.datetime.fromtimestamp(max_time).year) + '.' + \
                str(datetime.datetime.fromtimestamp(max_time).hour) + '.' + \
-               str(datetime.datetime.fromtimestamp(max_time).minute)+'.json'
+               str(datetime.datetime.fromtimestamp(max_time).minute) + '.' + \
+               str(datetime.datetime.fromtimestamp(max_time).second) + '.json'
     with open('post_data/'+filename, 'w') as f:
         json.dump(good_posts, f)
     with open('maxTime.txt', 'w') as timefile:
