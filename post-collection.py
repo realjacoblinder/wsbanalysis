@@ -22,10 +22,9 @@ if path.exists('maxTime.txt'):
     with open('maxTime.txt', 'r') as f:
         max_time = int(f.read())
         after_time = after_time + (max_time - after_time)
+
 while after_time <= stop_time:
-    all_posts = requests.get(
-        'https://api.pushshift.io/reddit/submission/search/?after={}&sort_type=created_utc&sort=asc&subreddit=wallstreetbets&size=150'.format(
-            after_time))
+    all_posts = requests.get('https://api.pushshift.io/reddit/submission/search/?after={}&sort_type=created_utc&sort=asc&subreddit=wallstreetbets&size=150'.format(after_time))
     data = all_posts.json()
     for post_dict in data['data']:
         try:
@@ -51,3 +50,4 @@ while after_time <= stop_time:
     with open('maxTime.txt', 'w') as timefile:
         timefile.write(str(max_time))
     print(filename)
+    good_posts = []
