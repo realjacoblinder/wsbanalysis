@@ -21,7 +21,7 @@ max_time = 0
 if path.exists('maxTime.txt'):
     with open('maxTime.txt', 'r') as f:
         max_time = int(f.read())
-
+        after_time = after_time + (max_time - after_time)
 while after_time <= stop_time:
     all_posts = requests.get(
         'https://api.pushshift.io/reddit/submission/search/?after={}&sort_type=created_utc&sort=asc&subreddit=wallstreetbets&size=150'.format(
