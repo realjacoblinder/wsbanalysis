@@ -35,19 +35,28 @@ while after_time <= stop_time:
             good_posts.append(post_dict)
             if post_dict['created_utc'] > max_time:
                 max_time = post_dict['created_utc']
-    # recalculate new time to get next 100 posts
-    after_time = after_time + (max_time - after_time)
-    time.sleep(2)  # not including this got us shutdown by the API
+        if good_posts:
+            # recalculate new time to get next 100 posts
+            after_time = after_time + (max_time - after_time)
+            time.sleep(2)  # not including this got us shutdown by the API
 
-    filename = str(datetime.datetime.fromtimestamp(max_time).day) + '.' + \
-               str(datetime.datetime.fromtimestamp(max_time).month) + '.' + \
-               str(datetime.datetime.fromtimestamp(max_time).year) + '.' + \
-               str(datetime.datetime.fromtimestamp(max_time).hour) + '.' + \
-               str(datetime.datetime.fromtimestamp(max_time).minute) + '.' + \
-               str(datetime.datetime.fromtimestamp(max_time).second) + '.json'
-    with open('post_data/'+filename, 'w') as f:
-        json.dump(good_posts, f)
-    with open('maxTime.txt', 'w') as timefile:
-        timefile.write(str(max_time))
-    print(filename)
-    good_posts = []
+            filename = str(datetime.datetime.fromtimestamp(max_time).day) + '.' + \
+                       str(datetime.datetime.fromtimestamp(max_time).month) + '.' + \
+                       str(datetime.datetime.fromtimestamp(max_time).year) + '.' + \
+                       str(datetime.datetime.fromtimestamp(max_time).hour) + '.' + \
+                       str(datetime.datetime.fromtimestamp(max_time).minute) + '.' + \
+                       str(datetime.datetime.fromtimestamp(max_time).second) + '.json'
+            with open('post_data/'+filename, 'w') as f:
+                json.dump(good_posts, f)
+            with open('maxTime.txt', 'w') as timefile:
+                timefile.write(str(max_time))
+            print(filename)
+            good_posts = []
+        else:
+            max_time += 30
+            # recalculate because got no posts
+            after_time = after_time + (max_time - after_time)
+            print("No posts, adding thirty seconds...")
+            time.sleep(2)  # not including this got us shutdown by the API
+
+
