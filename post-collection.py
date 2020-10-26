@@ -21,7 +21,12 @@ iteration = 0
 
 while after_time <= stop_time:
     all_posts = requests.get('https://api.pushshift.io/reddit/submission/search/?after={}&sort_type=created_utc&sort=asc&subreddit=wallstreetbets&size=150'.format(after_time))
-    data = all_posts.json()
+    try:
+        data = all_posts.json()
+    except:
+        print('JSON Error, try again.')
+        time.sleep(2)
+        continue
     good_posts = []
     for post_dict in data['data']:
         try:
