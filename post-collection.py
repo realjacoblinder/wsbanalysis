@@ -18,7 +18,7 @@ if path.exists('maxTime.txt'):
     with open('maxTime.txt', 'r') as f:
         max_time = int(f.read())
         after_time = after_time + (max_time - after_time)
-    for file in scandir('all_post_data'):
+    for file in scandir('post_data'):
         iteration += 1
 
 while after_time <= stop_time:
