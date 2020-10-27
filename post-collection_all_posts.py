@@ -3,18 +3,21 @@ import json
 import datetime
 import time
 from os import path
+from os import scandir
 
 after_time = datetime.datetime(2019, 10, 1, 0, 0).timestamp()
 after_time = int(after_time)
-stop_time = int(datetime.datetime(2020, 10, 26, 0, 0).timestamp())
+stop_time = int(time.time())
 
 max_time = 0
+iteration = 0 # for some reason two pulls sometimes had the same timestamped filename, used this to make sure no overwrites
 
 if path.exists('all_maxTime.txt'):
     with open('all_maxTime.txt', 'r') as f:
         max_time = int(f.read())
         after_time = after_time + (max_time - after_time)
-iteration = 0 # for some reason two pulls sometimes had the same timestamped filename, used this to make sure no overwrites
+    for file in scandir('all_post_data'):
+        iteration += 1
 
 while after_time <= stop_time:
     all_posts = requests.get('https://api.pushshift.io/reddit/submission/search/?after={}&sort_type=created_utc&sort=asc&subreddit=wallstreetbets&size=150'.format(after_time))

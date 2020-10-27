@@ -3,21 +3,23 @@ import json
 import datetime
 import time
 from os import path
+from os import scandir
 
 after_time = datetime.datetime(2019, 10, 1, 0, 0).timestamp()
 after_time = int(after_time)
-stop_time = int(datetime.datetime(2020, 10, 26, 0, 0).timestamp())
+stop_time = int(time.time())
 
 good_flairs = ['DD', 'Options', 'Stocks', 'Fundamentals', 'Technicals', 'YOLO', 'Discussion']
 
-
+iteration = 0
 max_time = 0
 
 if path.exists('maxTime.txt'):
     with open('maxTime.txt', 'r') as f:
         max_time = int(f.read())
         after_time = after_time + (max_time - after_time)
-iteration = 0
+    for file in scandir('all_post_data'):
+        iteration += 1
 
 while after_time <= stop_time:
     all_posts = requests.get('https://api.pushshift.io/reddit/submission/search/?after={}&sort_type=created_utc&sort=asc&subreddit=wallstreetbets&size=150'.format(after_time))
