@@ -41,7 +41,7 @@ if path.exists('before_time.txt'):
 # Set this variable to your username
 author = "pickbot"
 ####################################
-
+iteration = 0
 while True:
     comments = get_comment_ids(author=author, size=100, before=before, sort='desc', sort_type='created_utc')
     if not comments:
@@ -63,14 +63,10 @@ while True:
     for comment in comments:
         comment = comment['data']
         results.append(comment)
-    filename = str(datetime.datetime.fromtimestamp(before).day) + '.' + \
-               str(datetime.datetime.fromtimestamp(before).month) + '.' + \
-               str(datetime.datetime.fromtimestamp(before).year) + '.' + \
-               str(datetime.datetime.fromtimestamp(before).hour) + '.' + \
-               str(datetime.datetime.fromtimestamp(before).minute) + '.' + \
-               str(datetime.datetime.fromtimestamp(before).second) + '.json'
+    filename = str(iteration) + '.json'
     with open('{}_comments/{}'.format(author, filename), 'w') as f:
         json.dump(results, f)
     with open('before_time.txt', 'w') as f:
         f.write(str(before))
-    print(filename)
+    print(str(iteration) + '\t' + filename)
+    iteration += 1
