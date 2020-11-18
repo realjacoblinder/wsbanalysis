@@ -4,6 +4,7 @@ import datetime
 import time
 from os import path
 from os import scandir
+import sys
 
 after_time = datetime.datetime(2019, 10, 1, 0, 0).timestamp()
 after_time = int(after_time)
@@ -11,6 +12,7 @@ stop_time = int(time.time())
 
 max_time = 0
 iteration = 0 # for some reason two pulls sometimes had the same timestamped filename, used this to make sure no overwrites
+empty_quit = 0
 
 if path.exists('all_maxTime.txt'):
     with open('all_maxTime.txt', 'r') as f:
@@ -30,7 +32,15 @@ while after_time <= stop_time:
     for post_dict in data['data']:
         if post_dict['created_utc'] > max_time:
             max_time = post_dict['created_utc']
-        
+    
+    if not data['data']:
+        empty_quit += 1
+        print('Data empty, quit on 5. Current: ' + str(empty_quit))
+        if empty_quit == 5:
+            sys.exit()
+        time.sleep(2)
+        continue
+
     after_time = after_time + (max_time - after_time)
 
     time.sleep(2)  # not including this got us shutdown by the API
@@ -40,6 +50,6 @@ while after_time <= stop_time:
         json.dump(data['data'], f)
     with open('all_maxTime.txt', 'w') as timefile:
         timefile.write(str(max_time))
-    print(str(iteration) + ' ' + str(datetime.datetime.fromtimestamp(max_time)))
-    
+    print(str(iteration) + ' ' + str(datetime.datetime.fromtimestamp(max_time)) + ', stop_time is ' + str(datetime.datetime.fromtimestamp(stop_time)))
+    empty_quit = 0
     iteration += 1
