@@ -58,5 +58,4 @@ while after_time <= stop_time:
         # recalculate because got no posts
         after_time = after_time + (max_time - after_time)
         print("No posts, adding thirty seconds.... max_time is " + str(datetime.datetime.fromtimestamp(max_time)) + ', stop_time is ' + str(datetime.datetime.fromtimestamp(stop_time)))
-        time.sleep(5)  # not including this got us shutdown by the API, extra sleep for the failed pull, sometimes helps
-
+        time.sleep(1)  # not including this got us shutdown by the API
