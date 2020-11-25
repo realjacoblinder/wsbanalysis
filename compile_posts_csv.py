@@ -6,7 +6,9 @@ import pandas as pd
 def convert_to_est(gmt_timestamp):
 	return int(gmt_timestamp)-(60*60*5)
 	
-
+# file for compiling all of the json files into one large csv. this crashed my rasp-pi, which was fun. 
+# this file is specfic to compiling the "good" posts. maybe one day we'll grduate to command line arguments. 
+# i also drop some columns here, just to keep the size down. I don't need ever single col for the final set. 
 
 i = 0
 
