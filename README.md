@@ -16,7 +16,13 @@
 ### Finding empty tickers
 <p> Since we were allowed to find positions with no tickers, we can end up at this point with positions listed with no tickers. Previous preprocessing steps dropped positions if they were total nonsense, but its still possible here to have positions that make sense, but are so far only missing a ticker. This stage would look at positions with no ticker, clean the posts of stop words, and then tokenize the remaining posts. Then those tokens are compared one by one to a list of all tickers on the NASDAQ and the NYSE. Each time a token registered a hit it would be saved in a counter object, and ultimately only the three most common tickers would be returned to the data. From there, only the most common one would be used as the missing ticker, assuming that a post talking about one company would a) be able to imply the ticker in the position listing, and b) the most mentioned ticker would be the correct one. The three most common tickers are returned during the iteration to allow spot checking in review, and for completeness should further analysis ever happen. </p>
 
+## Data
+The data was too large to host on github, so they are for now hosted at [my server](https://static.jacoblinder.net/dsci511). The data can also reproduced by (patiently) running the scraper, the compiler, and then the Phase 3 Dataset build, in that order. Doing that should result in a complete dataset, with data up to the date the scraper was started. 
+
 ## Assumptions
+- Posts never refer to positions in the past
+- Ticker mentioned the most will be the company the post is talking about
+
 ## Challenges and Ideas
 <p> After the scrapers were written and running, we thought that it might be smarter to work backwards in time to collect the posts. We discovered that while this method is easier to get started, its no simpler to get new posts as they come up, still needing the dates of posts to be recorded separately. </p>
 <p> Another issue we discovered later was that the datetime objects written to the JSON file in python were not read in again as JSON files. We opted to handle that issue rather than refactor the scripts to output the data correctly, but this is something we need to change before moving forward in a meaningful way. An idea has been to simply save the dates as sets of integers, and use datetime to read them in again in further processing later. </p>
