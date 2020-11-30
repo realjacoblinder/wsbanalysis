@@ -3,5 +3,8 @@
 all_post_data/
 post_data/
 output.csv
-output1.csv
-out_json.json
+master_json_good.json
+output.json
+all_good_posts.csv
+final_output.json
+final_output.csv

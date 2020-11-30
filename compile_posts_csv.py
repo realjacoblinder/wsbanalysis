@@ -19,6 +19,9 @@ for file in tqdm(os.scandir('post_data')):
         else:
             data = data + json.load(f)
     i += 1
+print('Writing JSON master file...')
+with open('master_json_good.json', 'w') as f:
+    json.dump(data, f)
 print('Creating dataframe....')
 export = pd.DataFrame(data)
 print("Converting times to EST....")
