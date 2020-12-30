@@ -19,9 +19,11 @@ for file in tqdm(os.scandir('post_data')):
         else:
             data = data + json.load(f)
     i += 1
-print('Writing JSON master file...')
-with open('master_json_good.json', 'w') as f:
-    json.dump(data, f)
+
+#print('Writing JSON master file...')
+#with open('master_json_good.json', 'w') as f:
+#    json.dump(data, f)
+
 print('Creating dataframe....')
 export = pd.DataFrame(data)
 print("Converting times to EST....")
@@ -29,5 +31,7 @@ export['created_utc'] = export['created_utc'].apply(convert_to_est)
 print('Dropping columns....')
 to_keep = ['author', 'created_utc', 'title', 'link_flair_text','selftext', 'id', 'full_link']
 export = export[to_keep]
+print('Saving JSON...')
+export.to_json('master_json_good.json')
 print('Saving csv....')
 export.to_csv('all_good_posts.csv')
