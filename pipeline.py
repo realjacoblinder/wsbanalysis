@@ -55,15 +55,18 @@ while after_time <= stop_time: # decided to pick a time and move forward from th
     except: # ocassional errors on read, nothing to do with us (I think). Just try again in this case. 
         time.sleep(2)
         continue
-    df = pd.DataFrame(columns=['author', 'created_utc', 'selftext', 'title']) # these are the posts we'll keep
+    df = pd.DataFrame(columns=['author', 'created_utc', 'selftext', 'title', 'flair']) # these are the posts we'll keep
     for post_dict in data['data']:
-        if not all(i in post_dict for i in ['link_flair_text', 'author', 'created_utc', 'selftext', 'title']):
+        if not all(i in post_dict for i in ['author', 'created_utc', 'selftext', 'title']):
             continue
-        if post_dict['link_flair_text'] in good_flairs:
-            new_row = {'author':post_dict['author'], 'created_utc':post_dict['created_utc'], 'selftext':post_dict['selftext'], 'title':post_dict['title']}
-            df = df.append(new_row, ignore_index=True)
-            if post_dict['created_utc'] > max_time:
-                max_time = post_dict['created_utc']
+        if 'link_flair_text' in post_dict:
+            flair = post_dict['link_flair_text']
+        else:
+            flair = 'NONE'
+        new_row = {'author':post_dict['author'], 'created_utc':post_dict['created_utc'], 'selftext':post_dict['selftext'], 'title':post_dict['title'], 'flair':flair}
+        df = df.append(new_row, ignore_index=True)
+        if post_dict['created_utc'] > max_time:
+            max_time = post_dict['created_utc']
     if not df.empty: # if we have worthwhile posts
         # recalculate new time to get next 100 posts
         after_time = after_time + (max_time - after_time)
@@ -92,13 +95,14 @@ while after_time <= stop_time: # decided to pick a time and move forward from th
     df = df[df['regexed_combined'] != 0] 
     # in original left this data, but for the pipeline it needs to go ASAP
     
-    new_df = pd.DataFrame(columns=['position', 'post_date', 'author'])
+    new_df = pd.DataFrame(columns=['position', 'post_date', 'author', 'flair'])
     for index,row in df.iterrows():
         author = row['author']
+        flair = row['flair']
         post_date = row['created_utc']
         post_date = phase4.convert_to_est(post_date)
         for position in row['regexed_combined']:
-            new_row = {'position':position, 'post_date': post_date, 'author':author}
+            new_row = {'position':position, 'post_date': post_date, 'author':author, 'flair':flair}
             new_df = new_df.append(new_row, ignore_index=True)
 
     new_df['ticka'] = new_df['position'].apply(lambda x: x[0])
@@ -137,6 +141,7 @@ while after_time <= stop_time: # decided to pick a time and move forward from th
         dtype={
             'ticka':String(10),
             'author':String(20),
+            'flair':String(10),
             'strike':Float,
             'contract':Text,
             'expiry':DateTime,
