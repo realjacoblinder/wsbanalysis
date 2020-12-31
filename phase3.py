@@ -156,7 +156,7 @@ def expiry_year_corrector(row):
         post_month = post_date.month
         
         if expiry_year > current_year: 
-            expiry = expiry.timestamp()
+            #expiry = expiry.timestamp()
             continue # continue to other positions in post
             #return combined # no changes needed
         

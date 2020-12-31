@@ -1,3 +1,8 @@
+# Update 12/31/2020
+Since the first quarter ended I've continued to develop this project, working out any issues and generally trying to make it as effecient as possible. At this point I've rewritten the code to scrape WSB, process each batch of posts as they come, and then save the posts into a SQL database. The final issues to work out are expiration date issues, but otherwise the project works as intended. 
+This data will be used to learn Dash, and will eventually be built out into a full fledged dashboard. 
+The database will hopefully serve as an efficient repository for all this data and, after the dashboard, allow me to begin to learn GraphQL. 
+
 # DSCI 511 r/wallstreetbets adventure
 
 ## The Scraper(s)

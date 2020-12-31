@@ -31,6 +31,12 @@ def fill_close(row):
     if close_date > dt.datetime.today():
         return -1
     ticka = row['ticka']
+    while close_date.weekday() != 4: # correct it back to friday for those fat fingered among us
+        print(f'Date Adjustment from {close_date}')
+        if close_date.weekday() <= 3 and close_date.weekday() >= 1:
+            close_date = close_date + dt.timedelta(days=1)
+        else:
+            close_date = close_date - dt.timedelta(days=1)
     end_date = close_date+dt.timedelta(days=1)
     try:
         price_info = si.get_data(ticka, start_date=close_date, end_date=end_date)
