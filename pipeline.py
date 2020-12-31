@@ -140,8 +140,8 @@ while after_time <= stop_time: # decided to pick a time and move forward from th
         index=False,
         dtype={
             'ticka':String(10),
-            'author':String(20),
-            'flair':String(10),
+            'author':String(50),
+            'flair':String(50),
             'strike':Float,
             'contract':Text,
             'expiry':DateTime,
