@@ -27,8 +27,10 @@ def fill_open(row):
             
 
 def fill_close(row):
-    ticka = row['ticka']
     close_date = row['expiry']
+    if close_date > dt.datetime.today():
+        return -1
+    ticka = row['ticka']
     end_date = close_date+dt.timedelta(days=1)
     try:
         price_info = si.get_data(ticka, start_date=close_date, end_date=end_date)

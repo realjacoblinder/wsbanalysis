@@ -83,16 +83,15 @@ while after_time <= stop_time: # decided to pick a time and move forward from th
 
     df['all text'] = df['title'] + df['selftext']
     df['regexed_combined'] = df['all text'].apply(phase3.regex_pos)
-    #
-    df = df[df['regexed_combined'] != 0] 
-    # in original left this data, but for the pipeline it needs to go ASAP
     df['regexed_combined'] = df['regexed_combined'].apply(phase3.date_proccessor)
     df['regexed_combined'] = df['regexed_combined'].apply(phase3.date_proccessor_corrector)
     df['regexed_combined'] = df.apply(phase3.expiry_year_corrector, axis = 1)
     df['ticker_locator'] = 0 # needed to create the col before running the below. I have a lot to learn. 
     df['ticker_locator'] = df.apply(phase3.ticker_finder, axis = 1)
     df.apply(phase3.add_missing_tickers, axis = 1) # should be in place. function directly makes changes to columns
-
+    df = df[df['regexed_combined'] != 0] 
+    # in original left this data, but for the pipeline it needs to go ASAP
+    
     new_df = pd.DataFrame(columns=['position', 'post_date', 'author'])
     for index,row in df.iterrows():
         author = row['author']
@@ -123,8 +122,9 @@ while after_time <= stop_time: # decided to pick a time and move forward from th
     new_df['open_price'] = new_df.apply(phase4.fill_open, axis = 1)
     new_df = new_df[new_df['open_price'] != -1]
 
-    # mark close prices to be pulled later
-    new_df['close_price'] = -1
+    # mark close prices to be pulled later, but still make an attempt to fill now.
+    new_df['close_price'] = 0
+    new_df['close_price'] = new_df.apply(phase4.fill_close, axis = 1)
 
     # add to sql database
     table_name = 'positions'
