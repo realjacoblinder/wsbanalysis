@@ -156,7 +156,9 @@ def expiry_year_corrector(row):
         post_month = post_date.month
         
         if expiry_year > current_year: 
-            return combined # no changes needed
+            expiry = expiry.timestamp()
+            continue # continue to other positions in post
+            #return combined # no changes needed
         
         if expiry_month >= post_month: # expiry month is greater than month, is POST year
             expiry = datetime.datetime(post_year,expiry.month,expiry.day)
@@ -176,9 +178,11 @@ def ticker_finder(row):
         return 1
     lookup_string = row['title'] + ' ' + row['selftext']
     tickers = check_tickers(clean_post(lookup_string))
-    the_goods = tickers.most_common(3)
-    #print(the_goods)
-    return the_goods if the_goods else -1
+    the_goods = tickers.most_common(1)
+    if the_goods:
+        return the_goods
+    else:
+        return -1
 
 def clean_post(post_text):
     translator = str.maketrans('', '', string.punctuation) # for removing punctuation
