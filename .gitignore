@@ -9,3 +9,4 @@ all_good_posts.csv
 final_output.json
 final_output.csv
 .env
+__pychache__/
